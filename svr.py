@@ -15,3 +15,8 @@ def main(c,m):
 
 @app.route('/')
 def default():return 'null'
+
+#:st
+#set FLASK_APP=svr.py && set FLASK_ENV=development
+#python -m flask run -h 0.0.0.0 -p 8888 --with-threads --reload --debugger
+#goto st

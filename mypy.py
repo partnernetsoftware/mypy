@@ -65,7 +65,7 @@ import re
 def get_match(p,s):
     m = re.search( p, s, re.M|re.I)
     if m: return m.group(1)
-def tiny_email(user, mypass,sender, receiver, title, html, cc=None, bcc=None):
+def tiny_email(user, mypass, sender, receiver, Subject, html, smtp_host='smtp.qq.com', smtp_port=465, Cc='', Bcc=''):
     import smtplib
     from email.mime.text import MIMEText
     msg=MIMEText(html,'html','utf-8')
@@ -73,14 +73,16 @@ def tiny_email(user, mypass,sender, receiver, title, html, cc=None, bcc=None):
     if type(receiver) is str:
         receiver_a = [receiver,]
         receiver_s = receiver
-    else:
+    else:#iterable
         receiver_a = receiver
         receiver_s = ';'.join([str(v) for v in receiver])
     msg['To'] = receiver_s
-    msg['Subject']= title
-    if cc: msg['Cc'] = cc
-    if bcc: msg['Bcc'] = bcc
-    server=smtplib.SMTP_SSL("smtp.qq.com", 465) 
+    msg['Subject']= Subject
+    msg['Cc'] = Cc
+    msg['Bcc'] = Bcc
+    receiver_a += [Cc,Bcc]
+
+    server=smtplib.SMTP_SSL(smtp_host, smtp_port) 
     server.login(user, mypass)
     server.sendmail(sender, receiver_a, msg.as_string())
     server.quit()
